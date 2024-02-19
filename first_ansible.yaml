@@ -1,12 +1,22 @@
 ---
 
-- hosts: all
+- hosts: test_server
   become: true
   tasks:
 
   -  name: install apache2 package
      apt:
         name: apache2
-     name: update repo
+        state: latest
+     when: ansible_distribution in ["Debian","Ubuntu"]
+
+  -  name: update repo
      apt:
-        update_cache: yes
+         update_cache: yes
+
+  -  name: install apache2 package
+     dnf:
+         name: httpd
+         state: latest
+     when: ansible_distribution == "CentOS"
+
